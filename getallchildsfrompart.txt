@@ -1,0 +1,20 @@
+-- GET ALL CHILDDOCUMENTS FOR A PART
+DECLARE @PartID as int = 5360
+
+select PARENT.NFT_STL0 as [Parent Name]
+		,CHILD.DO_FSTL1 as [Child Name]
+		--,'PART' as [Parent Type]
+from  NFSTAMM as PARENT -- parent is part
+	join VERBIND as VERB
+	on VERB.VB_OBJIDNR1 = PARENT.NFT_IDNR and verb.VB_OBJTYP1=2			
+		join DOKSTAMM as CHILD -- child is document
+		on VERB.VB_OBJIDNR2 = CHILD.DO_IDNR and VERB.VB_OBJTYP2 = 3
+where PARENT.NFT_IDNR = @PartID
+
+--select VB_OBJIDNR1 , COUNT(VB_IDNR)
+--from VERBIND
+--where VB_OBJTYP1=2
+--group by VB_OBJIDNR1
+--order by COUNT(VB_IDNR) desc
+
+-- 18701, 6748, 5360
