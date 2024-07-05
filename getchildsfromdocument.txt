@@ -1,0 +1,13 @@
+-- GET ALL CHILDDOCUMENTS FOR A DOCUMENT
+DECLARE @DocumentID as int = 1633
+-- 1633, 10724, 5715
+
+select PARENT.DO_FSTL1 as [Parent Name]
+		,CHILD.DO_FSTL1 as [Child Name]
+		--,'DOCUMENT' as [Parent Type]
+from DOKSTAMM as PARENT -- parent is document
+	join VERBIND as VERB
+	on VERB.VB_OBJIDNR1 = PARENT.DO_IDNR and VERB.VB_OBJTYP1 = 3
+		join DOKSTAMM as CHILD -- child is document
+		on VERB.VB_OBJIDNR2 = CHILD.DO_IDNR and VERB.VB_OBJTYP2 = 3
+where PARENT.DO_IDNR = @DocumentID
