@@ -1,0 +1,31 @@
+-- QUERY TO GET ALL PARENTS FOR A PARTICULAR DOCUMENT
+DECLARE @SearchID as int = 5880
+DECLARE @ListParentParts as int = 1 -- INCLUDED IN RESULT IF 1
+DECLARE @ListParentDocuments as int = 1 -- INCLUDED IN RESULT IF 1
+
+select PARENT.NFT_STL0 as [Parent Name]
+		,CHILD.DO_FSTL1 as [Child Name]
+		,'PART' as [Parent Type]
+from  NFSTAMM as PARENT -- parent is part
+	join VERBIND as VERB
+	on VERB.VB_OBJIDNR1 = PARENT.NFT_IDNR and verb.VB_OBJTYP1=2			
+		join DOKSTAMM as CHILD -- child is document
+		on VERB.VB_OBJIDNR2 = CHILD.DO_IDNR and VERB.VB_OBJTYP2 = 3
+where CHILD.DO_IDNR = @SearchID and @ListParentParts=1
+
+union			
+
+select PARENT.DO_FSTL1 as [Parent Name]
+		,CHILD.DO_FSTL1 as [Child Name]
+		,'DOCUMENT' as [Parent Type]
+from DOKSTAMM as PARENT -- parent is document
+	join VERBIND as VERB
+	on VERB.VB_OBJIDNR1 = PARENT.DO_IDNR and VERB.VB_OBJTYP1 = 3
+		join DOKSTAMM as CHILD -- child is document
+		on VERB.VB_OBJIDNR2 = CHILD.DO_IDNR and VERB.VB_OBJTYP2 = 3
+where CHILD.DO_IDNR = @SearchID and @ListParentDocuments = 1
+
+
+
+
+
